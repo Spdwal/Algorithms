@@ -3,7 +3,7 @@
 #include<vector>
 using namespace std;
 
-int BinarySearch(const vector<int> &ivec, int high, int low, int searched)
+int BinarySearch(const vecg++ tor<int> &ivec, int high, int low, int searched)
 {
     int mid = (high + low) / 2;
     if(searched > ivec[mid])

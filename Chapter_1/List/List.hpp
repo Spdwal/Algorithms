@@ -24,7 +24,7 @@ public:
             push_back(c);
         }
     }
-	List(List && rhs):theSize(rhs.Size), first(rhs.first), tail(rhs.tail)
+	List(List && rhs):theSize(rhs.size), first(rhs.first), tail(rhs.tail)
     {
         rhs.init();
     }

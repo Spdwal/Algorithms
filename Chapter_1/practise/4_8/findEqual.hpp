@@ -32,7 +32,7 @@ int findEqualFast(const vector<int> &ivec)
         {
             myCount ++ ;
         }else{
-            flag = vec[i];
+            
         }
     }
 

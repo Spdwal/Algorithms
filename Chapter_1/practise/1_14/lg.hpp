@@ -1,3 +1,4 @@
+#pragma once
 #include<limits>
 #include<stdexcept>
 int lg(int num)

@@ -1,4 +1,9 @@
-
+./*/*/*/CMakeLists.txt
+./*/*/*/.idea/
+./*/*/*/cmake-build-debug/
+./*/*/.idea/
+./*/*/CMakeLists.txt
+./*/*/cmake-build-debug/
 *.hpp.gch
 *.h.gch
 a.out

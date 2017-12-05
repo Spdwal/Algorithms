@@ -1,3 +1,4 @@
+#prama once
 #include<vector>
 #include<iostream>
 #include<iterator>

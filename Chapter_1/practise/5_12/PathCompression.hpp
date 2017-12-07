@@ -16,9 +16,13 @@ public:
         while(root != Id[root]){
             root = Id[root];
         }
+        //一直佚代到根节点为止。
         while(Id[p] != root){
+            //保存自身节点。
             int temp = p;
+            //往父节点走。
             p = Id[p];
+            //将父节点的值设为root
             Id[temp] = root;
         }
         return root;

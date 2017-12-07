@@ -1,4 +1,4 @@
-#include"UF.hpp"
+#include"UFWeight.hpp"
 #include<iostream>
 #include<fstream>
 #include<string>

@@ -1,0 +1,48 @@
+#pragma once
+#include<vector>
+using namespace std;
+
+class UF{
+public:
+    UF() = default;
+    UF(int n):Id{vector<int>(n)}, Count{n} {
+        for(int i = 0; i < n; ++i)
+        {
+            Id[i] = i;
+        }
+    }
+    int find(int p){
+        int root = p;
+        while(root != Id[root]){
+            root = Id[root];
+        }
+        while(Id[p] != root){
+            int temp = p;
+            p = Id[p];
+            Id[temp] = root;
+        }
+        return root;
+    }
+
+    bool connected(int p, int q){
+        return find(p) == find(q);
+    }
+
+    void Union(int p, int q){
+        int pRoot = find(p);
+        int qRoot = find(q);
+        if(connected(p, q))
+            return;
+        else{
+            Id[pRoot] = qRoot;
+            Count--;
+        }
+    }
+
+    int count(){
+        return Count;
+    }
+private:
+    vector<int> Id;
+    int Count;
+};

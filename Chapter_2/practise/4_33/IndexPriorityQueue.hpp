@@ -7,14 +7,16 @@ using namespace std;
 
 class IndexMinPQ{
 private:
-    void less(int a, int b){
-        return keys[pq[a]] < keys[pq[b]];
+    bool less(int a, int b){
+        return keys[pq[a]] > keys[pq[b]];
     }
+
+   
     void exchange(int a, int b){
         //改变pq这个二叉堆的同时，也维护它的索引。
         std::swap(pq[a], pq[b]);
-        qp[pq[i]] = i;
-        qp[pq[j]] = j;
+        qp[pq[a]] = a;
+        qp[pq[b]] = b;
     }
     void swim(int k){
         while(k > 1 && less(k/2, k)){
@@ -38,9 +40,17 @@ private:
     }
 public:
     IndexMinPQ(int maxN = 100): N{0}, pq{vector<int>(maxN + 1)}, qp{vector<int>(maxN + 1)}, keys(vector<int>(maxN+1)){
-        for(int n = 0; n <= maxN; ++i){
-            qp[i] = -1;
+        for(int n = 0; n <= maxN; ++n){
+            qp[n] = -1;
         }
+    }
+
+    void my_delete(int k){
+        exchange(qp[k], N--);
+        swim(qp[k]);
+        sink(qp[k]);
+        keys[pq[N+1]] = 0;
+        qp[pq[N+1]]  = -1;
     }
 
     bool empty() { return N == 0;}
@@ -56,7 +66,7 @@ public:
         }
     }
     void insert(int k, int key){
-        if(contains(i)){
+        if(contains(k)){
             cout << "index is already in the priority queue" << endl;
             exit(0);
         }
@@ -67,6 +77,17 @@ public:
         swim(N);
     }
 
+    int min_index(){
+        return pq[1];
+    }
+
+    void change(int k, int item){
+        keys[k] = item;
+        swim(qp[k]);
+        sink(qp[k]);
+    }
+
+
     int operator[](int i){
         return keys[i];
     }
@@ -75,7 +96,7 @@ public:
     }
 
     int pop_min(){
-        if(n == 0){
+        if(N == 0){
             cout << "priority queue underflow" << endl;
             return numeric_limits<int>::min();
         }

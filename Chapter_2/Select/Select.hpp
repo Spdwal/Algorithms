@@ -11,7 +11,7 @@ int Partition(vector<int> &ivec, int low, int high)
     while(true){
         while(ivec[++i] < v) if(i == high) break;
         while(v < ivec[--j]) if(j == low) break;
-        if(i > j) break;
+        if(i >= j) break;
         std::swap(ivec[i], ivec[j]);
     }
     std::swap(ivec[low], ivec[j]);

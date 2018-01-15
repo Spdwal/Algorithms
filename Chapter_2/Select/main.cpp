@@ -15,8 +15,13 @@ int main()
         cout << c << endl;
     }
 
-    int i = Select(ivec, 4);
+    int i = Select(ivec, 7);
     cout << i << endl;
+    vector<int> arr{1,3,4,2,5,7,8,-1};
+    for(int i = 1; i <= 8; ++i){
+        cout << Select(arr, i) << endl;
+    }
 
+    
     return 0;
 }

@@ -22,9 +22,10 @@ int Select(vector<int> &ivec, int k)
     random_shuffle(ivec.begin(), ivec.end());
     int low = 0;
     int high = ivec.size() - 1;
+    k--;
     while(high > low){
         int j = Partition(ivec, low, high);
-        if((j + 1) == k){
+        if(j == k){
             return ivec[j];
         }else if(j > k){
             high = j - 1;

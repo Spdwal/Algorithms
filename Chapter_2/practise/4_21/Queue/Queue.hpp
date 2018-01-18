@@ -35,7 +35,7 @@ public:
 
     bool empty() { return que.size() == 0;}
 private:
-    //auto cmp = [](Node a, Node b){return a.num > b.num;};
+    
     int N;
     priority_queue<Node, vector<Node>, function<bool(Node,Node)>>  que;
 };

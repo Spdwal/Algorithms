@@ -8,12 +8,13 @@ template<typename Key, typename Value>
 class SequentialSearchST{
 private:
     struct Node{
-        Node(const Key k, const Value v, const Node *n):key(k), value(v), next(n) {}
+        Node(const Key k, const Value v, Node *n):key(k), value(v), next(n) {}
         Key key;
         Value value;
         Node *next;
     };
 public:
+    SequentialSearchST():first(nullptr){};
     Value get(Key k){
         for(Node* x = first; x != nullptr; x = x->next){
             if(k == x->key){
@@ -21,7 +22,7 @@ public:
             }
         }
         cout << "Key: " << k << " not found." << endl;
-        return;
+        exit(1);
     }
 
     void put(Key k, Value v){
@@ -38,5 +39,5 @@ public:
 private:
     Node *first;
 
-}
+};
 

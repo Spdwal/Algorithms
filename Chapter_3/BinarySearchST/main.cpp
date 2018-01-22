@@ -17,6 +17,16 @@ int main()
 
     cout << st.get(115) << endl;
 
+    vector<int> ivec = st.Keys(102, 111);
+
+    for(auto c : ivec){
+        cout << c << endl;
+    }
+
+   
+    cout << boolalpha << st.contains(107) << endl;
+
+
     return 0;
     
 }

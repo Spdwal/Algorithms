@@ -14,7 +14,16 @@ int main()
     st.put("3", 3);
 
     cout << st.get("2") << endl;
-    int i = st.get("4");
 
+    vector<pair<string, int>> ivec;
+    ivec = st.keys("0", "3");
+    for(auto c : ivec){
+        cout << c.first << endl;
+    }
+
+    st.Delete("2");
+    int i = st.get("2");
+
+    cout << i << endl;
     return 0;
 }

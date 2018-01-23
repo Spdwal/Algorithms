@@ -1,6 +1,8 @@
 #pragma once
 #include<numeric>
 #include<iostream>
+#include<vector>
+#include<utility>
 using namespace std;
 
 
@@ -14,29 +16,79 @@ private:
         Node *next;
     };
 public:
-    SequentialSearchST():first(nullptr){};
-    Value get(Key k){
-        for(Node* x = first; x != nullptr; x = x->next){
+    SequentialSearchST():first(nullptr), N{0} {};
+    Node* find(Key k){
+        for(Node *x = first; x != nullptr; x = x->next){
             if(k == x->key){
-                return x->value;
+                return x;
             }
         }
-        cout << "Key: " << k << " not found." << endl;
-        exit(1);
+        return nullptr;
     }
 
-    void put(Key k, Value v){
-        for(Node *x = first; x != nullptr; x = x->next)
-        {
-            if(k == x->key){
-                x->value = v;
-                return ;
+    Node* find_before(Key k){
+        if(k == first->key){
+            return first;
+        }
+        for(Node *x = first; x->next != nullptr; x = x->next){
+            if(k == x->next->key){
+                return x;
             }
         }
+        return nullptr;
+    }
+    Value get(Key k){
+        Node * ptr = find(k);
+        if(ptr != nullptr){
+            return ptr->value;
+        }else{
+            cout << "Key: " << k << " not found." << endl;
+            exit(1);
+        }
+    }
+
+    int Size(){
+        return N;
+    }
+    vector<pair<Key, Value>> keys(Key low, Key high){
+        vector<pair<Key, Value>> ivec;
+        for(Node *x = first; x != nullptr; x = x->next){
+            if(x->key <= high && x->key >= low){
+                ivec.push_back(make_pair(x->key, x->value));
+            }
+        }
+
+        return ivec;
+    }
+
+    void Delete(Key k){
+        Node *ptr = find_before(k);
+        if(ptr == nullptr){
+            cout << "Not find " << k << endl;
+        }else if(ptr == first && k == ptr->key){
+            N--;
+            Node * p = first;
+            first = first->next;
+            delete p;
+        }else{
+            N--;
+            Node *p = ptr->next;
+            ptr->next = ptr->next->next;
+            delete p;
+        }
+    }
+    void put(Key k, Value v){
+        Node *ptr = find(k);
+        if(ptr != nullptr){
+            ptr->value = v;
+            return;
+        }
+        N++;
         first = new Node(k, v, first);
         return;
     }
 private:
+    int N;
     Node *first;
 
 };

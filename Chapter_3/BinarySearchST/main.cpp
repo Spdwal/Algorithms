@@ -18,12 +18,11 @@ int main()
     cout << st.get(115) << endl;
 
     vector<int> ivec = st.Keys(102, 111);
-
     for(auto c : ivec){
         cout << c << endl;
     }
 
-   
+    st.Delete(107);
     cout << boolalpha << st.contains(107) << endl;
 
 

@@ -92,6 +92,19 @@ public:
         }
         return ivec;
     }
+
+    void Delete(Key k){
+        int i = rank(k);
+        if(keys[i] != k){
+            cout << "Can't find key " << k << endl;
+            return;
+        }
+        for(; i < N; ++i){
+            keys[i] = keys[i+1];
+            vals[i] = keys[i+1];
+        }
+        N--;
+    }
 private:
     vector<Key> keys;
     vector<Value> vals;

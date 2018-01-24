@@ -8,7 +8,7 @@ class BST{
 private:
     struct Node{
         Node() = default;
-        Node(Key k, Value v, int n): key{k}, val{v}, N{N}, Left{nullptr}, Right{nullptr} {}
+        Node(Key k, Value v, int n): key{k}, val{v}, N{n}, Left{nullptr}, Right{nullptr} {}
         Key key;
         Value val;
         Node *Left;
@@ -16,7 +16,7 @@ private:
         int N;
     };
 public:
-    BST() = default;
+    BST():root(nullptr){}
 
     int size(Node *x){
         if(x == nullptr){

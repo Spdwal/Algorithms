@@ -14,6 +14,11 @@ int main()
         cout << btree.get(100+i) << endl;
     }
 
-    cout << btree.size() << endl;
+
+    cout <<"The minKey:" <<  btree.min() << endl;
+    cout <<"The tree's size: " << btree.size() << endl;
+    cout <<"Select the 80th: " << btree.select(80) << endl;
+    cout <<"Select the rank of 160: " << btree.rank(160) << endl;
     return 0;
 }
+

@@ -31,6 +31,8 @@ int main()
     cout << boolalpha << btree.isBinaryTree() << endl;
 
     cout << btree.height() << endl;
+
+    cout << boolalpha << btree.isOrdered() << endl;
     return 0;
 }
 

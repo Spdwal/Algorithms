@@ -197,6 +197,24 @@ private:
                 isBinaryTree(x->Right));
     }
 
+    bool isOrdered(Node *x){
+        if(x->Left != nullptr && x->Right != nullptr){
+            return ((x->val > x->Left->val) &&
+                    (x->val < x->Right->val) &&
+                    isOrdered(x->Left) &&
+                    isOrdered(x->Right));
+        }else if(x->Left != nullptr){
+            return ((x->val > x->Left->val) &&
+                    isOrdered(x->Left));
+        }else if(x->Right != nullptr){
+            return ((x->val < x->Right->val) &&
+                    isOrdered(x->Right));
+        }else{
+            return true;
+        }
+    }
+
+
     void deconstructor(Node* x){
         if(x == nullptr){
             return;
@@ -278,10 +296,13 @@ public:
     int height(){
         return height(root);
     }
-
-
+    
     bool isBinaryTree(){
         return isBinaryTree(root);
+    }
+
+    bool isOrdered(){
+        return isOrdered(root);
     }
 
     ~BST(){

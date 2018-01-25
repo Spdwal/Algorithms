@@ -21,7 +21,13 @@ int main()
     cout <<"Select the rank of 116: " << btree.rank(116) << endl;
     btree.deleteKey(115);
     cout <<"Select the rank of 115: " << btree.rank(116) << endl;
-    
+
+    btree.print();
+    std::queue<int> que = btree.keys();
+    while(!que.empty()){
+        cout << que.front() << endl;
+        que.pop();
+    }
     return 0;
 }
 

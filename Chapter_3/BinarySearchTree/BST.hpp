@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<queue>
 using std::endl;
 using std::cout;
 
@@ -60,6 +61,14 @@ private:
         }
     }
 
+    Node* max(Node *x){
+        if(x->Right == nullptr){
+            return x;
+        }else{
+            return max(x->Right);
+        }
+    }
+
 
     Node* select(Node*x, int k){
         if(x == nullptr){
@@ -75,7 +84,7 @@ private:
             return x;
         }
     }
-
+    
     int rank(Key k, Node *x){
         if(x == nullptr){
             return 0;
@@ -129,6 +138,30 @@ private:
         x->N = size(x->Left) + size(x->Right) + 1;
         return x;
     }
+
+    void print(Node *x){
+        if(x == nullptr){
+            return;
+        }
+        print(x->Left);
+        cout << "Key: " << x->key << " Value: " << x->val << endl;
+        print(x->Right);
+    }
+
+    void keys(Node *x, std::queue<Key> &que, Key low, Key high){
+        if(x == nullptr){
+            return ;
+        }
+        if(low < x->key){
+            keys(x->Left, que, low, high);
+        }
+        if(low <= x->key && high >= x->key){
+            que.push(x->key);
+        }
+        if(high > x->key){
+            keys(x->Right, que, low, high);
+        }
+    }
 public:
     BST():root(nullptr){}
 
@@ -138,6 +171,11 @@ public:
 
     Key min(){
         return min(root)->key;
+    }
+
+    Key max(){
+        return max(root)->key;
+
     }
 
     Key floor(Key k){
@@ -170,6 +208,19 @@ public:
 
     void deleteKey(Key k){
         root = deleteKey(root, k);
+    }
+
+    void print(){
+        print(root);
+    }
+
+    std::queue<Key> keys(Key low, Key high){
+        std::queue<Key> que;
+        keys(root, que, low, high);
+        return que;
+    }
+    std::queue<Key> keys(){
+        return keys(min(), max());
     }
 private:
     Node *root;

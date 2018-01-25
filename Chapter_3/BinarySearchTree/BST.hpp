@@ -88,6 +88,47 @@ private:
             return size(x->Left);
         }
     }
+
+    Node* deleteMin(Node *x){
+        if(x->Left == nullptr){
+            Node *tmp = x->Right;
+            delete x;
+            return tmp;
+        }else{
+            x->Left = deleteMin(x->Left);
+            x->N = size(x->Left) + size(x->Right) + 1;
+            return x;
+        }
+    }
+
+    Node* deleteKey(Node *x, Key k){
+        if(x==nullptr){
+            return nullptr;
+        }
+        if(k < x->key){
+            x->Left = deleteKey(x->Left, k);
+        }else if(k > x->key){
+            x->Right = deleteKey(x->Right, k);
+        }else{
+            if(x->Right == nullptr){
+                Node *tmp = x->Left;
+                delete x;
+                return tmp;
+            }
+            if(x->Left == nullptr){
+                Node *tmp = x->Right;
+                delete x;
+                return tmp;
+            }
+            Node *tmp = x;
+            x = min(tmp->Right);
+            x->Right = deleteMin(tmp->Right);
+            x->Left = tmp->Left;
+            delete tmp;
+        }
+        x->N = size(x->Left) + size(x->Right) + 1;
+        return x;
+    }
 public:
     BST():root(nullptr){}
 
@@ -110,15 +151,25 @@ public:
     Key select(int k){
         return select(root, k)->key;
     }
+
     void put(Key k, Value v){
         root = put(root, k, v);
     }
+
     Value get(Key k){
         return get(root, k);
     }
 
     int rank(Key k){
         return rank(k, root);
+    }
+
+    void deleteMin(){
+        root = deleteMin(root);
+    }
+
+    void deleteKey(Key k){
+        root = deleteKey(root, k);
     }
 private:
     Node *root;

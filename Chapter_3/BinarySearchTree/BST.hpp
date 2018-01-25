@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<queue>
+#include<algorithm>
 using std::endl;
 using std::cout;
 
@@ -162,6 +163,7 @@ private:
             keys(x->Right, que, low, high);
         }
     }
+
 public:
     BST():root(nullptr){}
 
@@ -221,6 +223,15 @@ public:
     }
     std::queue<Key> keys(){
         return keys(min(), max());
+    }
+
+    int height(Node *x){
+        if(x == nullptr)
+            return 0;
+        return std::max(height(x->Left), height(x->Right)) + 1;
+    }
+    int height(){
+        return height(root);
     }
 private:
     Node *root;

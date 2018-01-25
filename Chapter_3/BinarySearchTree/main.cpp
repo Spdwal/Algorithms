@@ -28,6 +28,8 @@ int main()
         cout << que.front() << endl;
         que.pop();
     }
+
+    cout << btree.height() << endl;
     return 0;
 }
 

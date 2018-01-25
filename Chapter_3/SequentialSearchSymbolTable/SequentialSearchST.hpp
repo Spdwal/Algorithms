@@ -15,6 +15,14 @@ private:
         Value value;
         Node *next;
     };
+
+    void deconstructor(Node* x){
+        if(x == nullptr){
+            return;
+        }
+        deconstructor(x->next);
+        delete x;
+    }
 public:
     SequentialSearchST():first(nullptr), N{0} {};
     Node* find(Key k){
@@ -87,9 +95,12 @@ public:
         first = new Node(k, v, first);
         return;
     }
+
+    ~SequentialSearchST(){
+        deconstructor(first);
+    }
 private:
     int N;
     Node *first;
-
 };
 

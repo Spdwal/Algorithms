@@ -188,6 +188,15 @@ private:
         }
     }
 
+    void deconstructor(Node* x){
+        if(x == nullptr){
+            return;
+        }
+        Node *tmp = x;
+        deconstructor(x->Left);
+        deconstructor(x->Right);
+        delete tmp;
+    }
 public:
     BST():root(nullptr){}
 
@@ -259,6 +268,10 @@ public:
     }
     int height(){
         return height(root);
+    }
+
+    ~BST(){
+        deconstructor(root);
     }
 private:
     Node *root;

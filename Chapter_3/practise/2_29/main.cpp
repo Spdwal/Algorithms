@@ -33,6 +33,7 @@ int main()
     cout << btree.height() << endl;
 
     cout << boolalpha << btree.isOrdered() << endl;
+    cout << boolalpha << btree.hasNoDuplicates() << endl;
     return 0;
 }
 

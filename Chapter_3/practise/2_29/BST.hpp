@@ -224,6 +224,28 @@ private:
         deconstructor(x->Right);
         delete tmp;
     }
+
+    bool hasNoDuplicates(Node *x){
+        if(x == nullptr){
+            return true;
+        }
+        if(x->Left != nullptr && x->Right != nullptr){
+            if(x->val == x->Left->val || x->val == x->Right->val){
+                return false;
+            }
+            return hasNoDuplicates(x->Left) && hasNoDuplicates(x->Right);
+        }else if(x->Left != nullptr){
+            if(x->val == x->Left->val){
+                return false;
+            }
+            return hasNoDuplicates(x->Left);
+        }else if(x->Right != nullptr){
+            if(x->val == x->Right->val){
+                return false;
+            }
+            return hasNoDuplicates(x->Left);
+        }
+    }
 public:
     BST():root(nullptr){}
 
@@ -305,6 +327,9 @@ public:
         return isOrdered(root);
     }
 
+    bool hasNoDuplicates(){
+        hasNoDuplicates(root);
+    }
     ~BST(){
         deconstructor(root);
     }

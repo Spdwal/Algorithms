@@ -68,9 +68,9 @@ private:
 
     //如果两个子节点都是红色节点，全部变色
     void flipColors(shared_ptr<Node> h){
-        h->color = RBTree::RED;
-        h->Left->color = RBTree::BLACK;
-        h->Right->color = RBTree::BLACK;
+        h->color = !h->color;
+        h->Left->color = !h->Left->color;
+        h->Right->color = !h->Right->color;
     }
 
     //插入节点的实现
@@ -114,9 +114,106 @@ private:
             return x->key;
         }
     }
+
+    shared_ptr<Node> balance(shared_ptr<Node> h){
+        if(isRed(h->Right)){
+            h = rotateLeft(h);
+        }
+        if(isRed(h->Left) && isRed(h->Left->Left)){
+            h = rotateRight(h);
+        }
+        if(isRed(h->Left) && isRed(h->Right)){
+            flipColors(h);
+        }
+        h->N = size(h->Left) + size(h->Right) + 1;
+        return h;
+    }
+
+    //使h或者h左子节点的某个子节点为红节点
+    shared_ptr<Node> moveRedLeft(shared_ptr<Node> h){
+        //融和成一个4节点
+        //本来这个节点左节点为黑，右节点天然为黑
+        //flipColor后左右节点都为红，即为一个4节点。
+        flipColors(h);
+        //如果同时h的右节点的左节点也为红色，此时它便成了一个5节点，应该要避免。
+        //将键借给左子节点
+        //其实是使右节点的左节点变为根节点，然后元来的根节点和左子节点组成红色节点。
+        if(isRed(h->Right->Left)){
+            //右节点的左节点取命节点RL，此时RL节点为h的右节点。
+            //且R节点为红节点。
+            h->Right = rotateRight(h->Right);
+            //这里将RL取代原来H的位置与上层节点相连
+            //而原来的h节点与L节点组成一个3节点
+            h = rotateLeft(h);
+            //此时RL节点的左右子节点都为红节点，变色。
+            flipColors(h);
+        }
+        return h;
+    }
+
+    //将右子节点或者其子节点变为红节点。
+    shared_ptr<Node> moveRedRight(shared_ptr<Node> h){
+        //右节点天然为黑，左节点为红
+        //变色，将h节点融和和R成一个3节点
+        //此时L节点为黑色，R为红色
+        flipColors(h);
+        //如果h的左子节点的左子节点为红色节点
+        if(isRed(h->Left->Left)){
+            //h直接右旋，将L节点代替元来的h节点与上层节点相连
+            //h节点与R节点组成一个3节点。
+            //此时h节点原来R的颜色，即红色。
+            h = rotateRight(h);
+            //因为此时L节点左右都为红色节点，变色。
+            flipColors(h);
+        }
+        return h;
+    }
+
+    shared_ptr<Node> deleteMin(shared_ptr<Node> h){
+        if(h->Left == nullptr){
+            return nullptr;
+        }
+
+        //第一个条件为它的左节点不是红色节点，也就是h节点不是3节点
+        //它的左子节点也不是3节点时，需要调整
+        if(!isRed(h->Left) && isRed(h->Left->Left)){
+            //将左子节点调整成适和删除的状态，避免删除一个2节点
+            h = moveRedLeft(h);
+        }
+
+        //递归删除
+        h->Left = deleteMin(h->Left);
+
+        //自下而上调整成自平衡状态。
+        return balance(h);
+    }
+
+    shared_ptr<Node> deleteMax(shared_ptr<Node> h){
+        //如果左子节点为红色，将红色连接移动到右侧。
+        if(isRed(h->Left)){
+            //L节点代替h节点的位置，h节点为红色节点。
+            h = rotateRight(h);
+        }
+        
+        if(h->Right == nullptr){
+            return nullptr;
+        }
+
+        if(!isRed(h->Right) && !isRed(h->Right->Left)){
+            h = moveRedRight(h);
+        }
+
+        h->Right = deleteMax(h->Right);
+
+        return balance(h);
+    }
 public:
 
     RBTree(): root(nullptr) {}
+
+    bool isEmpty(){
+        return root == nullptr;
+    }
 
     int size(){
         return size(root);
@@ -132,6 +229,38 @@ public:
         return get(root, k);
     }
 
+    //删除最小节点
+    void deleteMin(){
+        if(isEmpty()){
+            throw runtime_error("BST underflow");
+        }
+        //如果两个子节点都不是红色节点，那么将根节点设为红色节点，方便操作。
+        if(!isRed(root->Left) && !isRed(root->Right))
+            root->color = RBTree::RED;
+        //删除操作
+        root = deleteMin(root);
+        //变回黑色节点
+        if(!isEmpty()){
+            root->color = RBTree::BLACK;
+        }
+    }
+
+
+    void deleteMax(){
+        if(isEmpty()){
+            throw runtime_error("BST underflow");
+        }
+        //同deleteMin()
+        if(!isRed(root->Left) && !isRed(root->Right)){
+            root->color = RBTree::RED;
+        }
+        //删除操作
+        root = deleteMax(root);
+        //变色
+        if(!isEmpty()){
+            root->color = RBTree::BLACK;
+        }
+    }
 private:
     shared_ptr<Node> root;
 };

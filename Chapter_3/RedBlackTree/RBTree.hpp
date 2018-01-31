@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<memory>
+#include<algorithm>
 using namespace std;
 
 template<typename Key, typename Value>
@@ -25,6 +26,30 @@ private:
         }
         return x->N;
     }
+
+    int height(shared_ptr<Node> h){
+        if(h == nullptr){
+            return -1;
+        }
+        return 1 + std::max(height(h->Left), height(h->Right));
+    }
+
+
+    shared_ptr<Node> Min(shared_ptr<Node> x){
+        if(x->Left == nullptr){
+            return x;
+        }
+        return Min(x->Left);
+    }
+
+
+    shared_ptr<Node> Max(shared_ptr<Node> x){
+        if(x->Right == nullptr){
+            return x;
+        }
+        return Max(x->Right);
+    }
+
 
     //判断节点的颜色
     bool isRed(shared_ptr<Node> x){
@@ -207,6 +232,50 @@ private:
 
         return balance(h);
     }
+
+    //delete的实现
+    shared_ptr<Node> deleteK(shared_ptr<Node> h, Key k){
+        if(k < h->key){
+            //如果L不是一个红色节点，且LL节点也不是红色节点
+            //意即左节点不是一个3节点，需要从右边移动一个节点到左节点，形成一个3节点
+            if(!isRed(h->Left) && !isRed(h->Left->Left)){
+                h = moveRedLeft(h);
+            }
+            //递归删除
+            h->Left = deleteK(h->Left, k);
+        }else{
+            //如果L节点是红色，那么将红色连接移动到右边
+            //此时L节点为根节点，M节点为右节点
+            //此时RL节点为M节点的右节点
+            if(isRed(h->Left)){
+                h = rotateRight(h);
+            }
+            //如果之前h->L为红色节点，此时右节点为一个3节点，如果它为最小，那么就直接删除
+            //向下查找的过程中，已经保证了节点不可能是2节点，如果左子节点非空，右子节点空
+            //只可能是3节点，经过上一个if，3节点的红连接右斜了。
+            if(k == h->key && (h->Right == nullptr)){
+                return nullptr;
+            }
+            //右子树保证非2节点。
+            if(!isRed(h->Right) && !isRed(h->Right->Left)){
+                h = moveRedRight(h);
+            }
+            //找到节点，将节点替换程后继节点，类似二叉树操作，
+            if(k == h->key){
+                shared_ptr<Node> x = Min(h->Right);
+                h->key = x->key;
+                h->val = x->val;
+
+                h->Right = deleteMin(h->Right);
+            }
+            else{
+                //没找到，继续递归查找
+                h->Right = deleteK(h->Right, k);
+            }
+        }
+
+        return balance(h);
+    }
 public:
 
     RBTree(): root(nullptr) {}
@@ -219,6 +288,12 @@ public:
         return size(root);
     }
 
+    Key Min(){
+        return Min(root)->key;
+    }
+    Key Max(){
+        return Max(root)->key;
+    }
     //插入节点
     void put(Key k, Value v){
         root = put(root, k, v);
@@ -260,6 +335,16 @@ public:
         if(!isEmpty()){
             root->color = RBTree::BLACK;
         }
+    }
+
+    void deleteK(Key k){
+        if(!isRed(root->Left) && !isRed(root->Right)){
+            root->color = RBTree::RED;
+        }
+
+        root = deleteK(root, k);
+        if(!isEmpty())
+            root->color = RBTree::BLACK;
     }
 private:
     shared_ptr<Node> root;

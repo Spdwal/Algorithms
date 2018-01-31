@@ -276,6 +276,21 @@ private:
 
         return balance(h);
     }
+
+
+    bool is23(shared_ptr<Node> x){
+        if(x == nullptr){
+            return true;
+        }
+        if(isRed(x->Right)){
+            return false;
+        }
+        //原则上x不会是红节点，但是即使是红节点，也不影响红黑树的性质
+        if(x != root && isRed(x) && isRed(x->Left)){
+            return false;
+        }
+        return is23(x->Left) && is23(x->Right);
+    }
 public:
 
     RBTree(): root(nullptr) {}
@@ -345,6 +360,10 @@ public:
         root = deleteK(root, k);
         if(!isEmpty())
             root->color = RBTree::BLACK;
+    }
+
+    bool is23(){
+        return is23(root);
     }
 private:
     shared_ptr<Node> root;

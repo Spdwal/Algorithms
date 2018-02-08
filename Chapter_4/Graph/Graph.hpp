@@ -21,8 +21,8 @@ public:
      }
     
     friend istream& operator>>(istream &in, Graph &G);
-    int my_V() { return V;}
-    int my_E() { return E;}
+    int my_V() const{ return V;}
+    int my_E() const{ return E;}
 
     vector<int> adj(int v){
         return ivec[v];
